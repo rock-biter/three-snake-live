@@ -30,6 +30,19 @@ document.body.appendChild(renderer.domElement)
 
 // sposto indietro la camera
 camera.position.z = 4
+// mesh.rotation.y = Math.PI / 4
+// mesh.rotation.x = Math.PI / 4
 
-// renderizzo la scena
-renderer.render(scene, camera)
+function tic() {
+	// renderizzo la scena
+	renderer.render(scene, camera)
+
+	mesh.rotation.x += 0.01
+	mesh.rotation.y += 0.01
+
+	// invochiamo la funzione tic al prossimo frame
+	requestAnimationFrame(tic)
+}
+
+//facciamo partire il frame loop
+requestAnimationFrame(tic)
