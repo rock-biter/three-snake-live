@@ -20,7 +20,12 @@ const temp = {
 }
 
 // creo la camera prospettica
-const camera = new THREE.PerspectiveCamera(75, temp.width / temp.height)
+const camera = new THREE.PerspectiveCamera(
+	75,
+	temp.width / temp.height,
+	0.1,
+	10
+)
 
 // creo il renderer
 const renderer = new THREE.WebGLRenderer()
