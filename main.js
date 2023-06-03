@@ -73,6 +73,7 @@ function tic() {
 	 */
 	const time = clock.getElapsedTime()
 
+	mesh.scale.setZ(Math.sin(time * 3) * 0.5 + 1)
 	camera.position.y = Math.sin(time * 2) * 2
 	camera.position.x = Math.cos(time * 2) * 3
 	camera.lookAt(mesh.position)
@@ -88,7 +89,8 @@ requestAnimationFrame(tic)
  * animazione in ingresso del cubo
  */
 function pop() {
-	gsap.to(mesh.scale, { duration: 2, x: 1, y: 1, z: 1 })
+	mesh.scale.set(0, 0)
+	gsap.to(mesh.scale, { duration: 1, x: 1, y: 1 })
 	gsap.to(mesh.rotation, { duration: 1, x: 3.14, y: 3.14 })
 }
 
@@ -97,4 +99,4 @@ pop()
 /**
  * invoca la funzione pop al click sulla viewport
  */
-// window.addEventListener('click', pop)
+window.addEventListener('click', pop)
