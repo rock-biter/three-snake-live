@@ -50,7 +50,6 @@ camera.position.z = 4
  */
 const vel = 0.5
 
-// let time = Date.now()
 /**
  * Three js Clock
  */
@@ -65,26 +64,18 @@ mesh.scale.multiplyScalar(0)
  * frame loop
  */
 function tic() {
-	// const currentTime = Date.now()
 	/**
 	 * tempo trascorso dal frame precedente
 	 */
-	// const deltaTime = (currentTime - time) / 1000
-	const deltaTime = clock.getDelta()
+	// const deltaTime = clock.getDelta()
 	/**
 	 * tempo totale trascorso dallínizio
 	 */
 	const time = clock.getElapsedTime()
 
-	// time = currentTime
-	// console.log(time)
-
-	camera.position.y = Math.sin(time * 2)
+	camera.position.y = Math.sin(time * 2) * 2
+	camera.position.x = Math.cos(time * 2) * 3
 	camera.lookAt(mesh.position)
-
-	// console.log(deltaTime)
-	// mesh.rotation.x += vel * deltaTime
-	// mesh.rotation.y += vel * deltaTime
 
 	renderer.render(scene, camera)
 
