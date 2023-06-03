@@ -41,14 +41,24 @@ renderer.setSize(temp.width, temp.height)
 document.body.appendChild(renderer.domElement)
 
 /**
- * move camera backward
+ * muovo indietro la camera
  */
 camera.position.z = 4
 
+/**
+ * velocità di rotazione radianti al secondo
+ */
 const vel = 0.5
 
 // let time = Date.now()
+/**
+ * Three js Clock
+ */
 const clock = new THREE.Clock()
+
+/**
+ * scala iniziale del cubo per l;animazione in ingresso
+ */
 mesh.scale.multiplyScalar(0)
 
 /**
@@ -56,8 +66,14 @@ mesh.scale.multiplyScalar(0)
  */
 function tic() {
 	// const currentTime = Date.now()
+	/**
+	 * tempo trascorso dal frame precedente
+	 */
 	// const deltaTime = (currentTime - time) / 1000
 	const deltaTime = clock.getDelta()
+	/**
+	 * tempo totale trascorso dallínizio
+	 */
 	const time = clock.getElapsedTime()
 
 	// time = currentTime
@@ -77,9 +93,17 @@ function tic() {
 
 requestAnimationFrame(tic)
 
+/**
+ * animazione in ingresso del cubo
+ */
 function pop() {
 	gsap.to(mesh.scale, { duration: 2, x: 1, y: 1, z: 1 })
 	gsap.to(mesh.rotation, { duration: 1, x: 3.14, y: 3.14 })
 }
 
-window.addEventListener('click', pop)
+pop()
+
+/**
+ * invoca la funzione pop al click sulla viewport
+ */
+// window.addEventListener('click', pop)
