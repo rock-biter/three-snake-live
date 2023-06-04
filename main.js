@@ -19,16 +19,16 @@ scene.add(mesh)
 /**
  * render sizes
  */
-const temp = {
-	width: 1024,
-	height: 720,
+const sizes = {
+	width: window.innerWidth,
+	height: window.innerHeight,
 }
 /**
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(
 	75,
-	temp.width / temp.height,
+	sizes.width / sizes.height,
 	0.1,
 	10
 )
@@ -37,7 +37,7 @@ const camera = new THREE.PerspectiveCamera(
  * renderer
  */
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(temp.width, temp.height)
+renderer.setSize(sizes.width, sizes.height)
 document.body.appendChild(renderer.domElement)
 
 /**
@@ -100,3 +100,20 @@ pop()
  * invoca la funzione pop al click sulla viewport
  */
 window.addEventListener('click', pop)
+
+window.addEventListener('resize', () => {
+	// update sizes
+	sizes.width = window.innerWidth
+	sizes.height = window.innerHeight
+
+	// update camera
+	camera.aspect = sizes.width / sizes.height
+	// update projection matrix
+	camera.updateProjectionMatrix()
+
+	// update renderer
+	renderer.setSize(sizes.width, sizes.height)
+})
+
+const pixelRatio = Math.min(window.devicePixelRatio, 2)
+renderer.setPixelRatio(pixelRatio)
