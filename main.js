@@ -18,16 +18,16 @@ scene.add(mesh)
 /**
  * render sizes
  */
-const temp = {
-	width: 1024,
-	height: 720,
+const sizes = {
+	width: window.innerWidth,
+	height: window.innerHeight,
 }
 /**
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(
 	75,
-	temp.width / temp.height,
+	sizes.width / sizes.height,
 	0.1,
 	10
 )
@@ -36,7 +36,10 @@ const camera = new THREE.PerspectiveCamera(
  * renderer
  */
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(temp.width, temp.height)
+renderer.setSize(sizes.width, sizes.height)
+
+const pixelRatio = Math.min(window.devicePixelRatio, 2)
+renderer.setPixelRatio(pixelRatio)
 document.body.appendChild(renderer.domElement)
 
 /**
@@ -78,3 +81,21 @@ function tic() {
 }
 
 requestAnimationFrame(tic)
+
+window.addEventListener('resize', onResize)
+
+function onResize() {
+	console.log('resize')
+	sizes.width = window.innerWidth
+	sizes.height = window.innerHeight
+
+	camera.aspect = sizes.width / sizes.height
+	camera.updateProjectionMatrix()
+
+	renderer.setSize(sizes.width, sizes.height)
+
+	const pixelRatio = Math.min(window.devicePixelRatio, 2)
+	renderer.setPixelRatio(pixelRatio)
+}
+
+// console.log(window.devicePixelRatio)
