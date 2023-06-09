@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
+import { ArcballControls } from 'three/examples/jsm/controls/ArcballControls'
 
 /**
  * Scene
@@ -7,13 +8,23 @@ import * as THREE from 'three'
 const scene = new THREE.Scene()
 
 /**
- * Cube
+ * Manhattan
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1)
 const material = new THREE.MeshNormalMaterial()
 
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+const size = 6
+
+for (let i = 0; i < size; i++) {
+	for (let j = 0; j < size; j++) {
+		const height = Math.random() * 4 + 1
+
+		const geometry = new THREE.BoxGeometry(1, height, 1)
+
+		const mesh = new THREE.Mesh(geometry, material)
+		mesh.position.set(-size + i * 2, height / 2, -size + j * 2)
+		scene.add(mesh)
+	}
+}
 
 /**
  * render sizes
@@ -29,8 +40,11 @@ const camera = new THREE.PerspectiveCamera(
 	75,
 	sizes.width / sizes.height,
 	0.1,
-	10
+	50
 )
+
+camera.position.set(8, 8, 8)
+camera.lookAt(new THREE.Vector3())
 
 /**
  * renderer
@@ -47,7 +61,7 @@ document.body.appendChild(renderer.domElement)
 /**
  * muovo indietro la camera
  */
-camera.position.z = 4
+// camera.position.z = 4
 
 /**
  * velocità di rotazione radianti al secondo
@@ -68,14 +82,9 @@ function tic() {
 	 */
 	// const deltaTime = clock.getDelta()
 	/**
-	 * tempo totale trascorso dallínizio
+	 * tempo totale trascorso dall'inizio
 	 */
-	const time = clock.getElapsedTime()
-
-	mesh.scale.setZ(Math.sin(time * 3) * 0.5 + 1)
-	camera.position.y = Math.sin(time * 2) * 2
-	camera.position.x = Math.cos(time * 2) * 3
-	camera.lookAt(mesh.position)
+	// const time = clock.getElapsedTime()
 
 	renderer.render(scene, camera)
 
