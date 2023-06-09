@@ -36,12 +36,7 @@ const sizes = {
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(
-	75,
-	sizes.width / sizes.height,
-	0.1,
-	50
-)
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1)
 
 camera.position.set(8, 8, 8)
 camera.lookAt(new THREE.Vector3())
@@ -62,6 +57,12 @@ document.body.appendChild(renderer.domElement)
  * muovo indietro la camera
  */
 // camera.position.z = 4
+
+/**
+ * ArcballControls
+ */
+
+const controls = new ArcballControls(camera, renderer.domElement, scene)
 
 /**
  * velocità di rotazione radianti al secondo
