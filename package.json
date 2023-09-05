@@ -18,6 +18,7 @@
   "dependencies": {
     "alea": "^1.0.1",
     "gsap": "^3.11.5",
+    "lil-gui": "^0.18.2",
     "simplex-noise": "^4.0.1",
     "three": "^0.151.3"
   }
