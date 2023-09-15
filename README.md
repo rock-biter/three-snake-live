@@ -1,4 +1,4 @@
-# Three.js starter kit
+# Three.js + Vite starter kit
 
 This repo is a starting point for every three.js project. 
 
