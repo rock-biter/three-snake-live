@@ -53,22 +53,32 @@ export default class Snake extends EventDispatcher {
 		)
 		leftEye.scale.x = 0.1
 		leftEye.position.x = 0.5
-		leftEye.position.y = 0.1
-		leftEye.position.z = 0.1
+		leftEye.position.y = 0.12
+		leftEye.position.z = -0.1
+
+		let leftEyeHole = new Mesh(
+			new SphereGeometry(0.22, 10, 10),
+			new MeshStandardMaterial({ color: 0x333333 })
+		)
+		leftEyeHole.scale.set(1, 0.6, 0.6)
+		leftEyeHole.position.x += 0.05
+		leftEye.add(leftEyeHole)
 
 		const rightEye = leftEye.clone()
+
 		rightEye.position.x = -0.5
+		rightEye.rotation.y = Math.PI
 
 		const mouthMesh = new Mesh(
-			new RoundedBoxGeometry(1.1, 0.08, 0.5, 5, 0.08),
+			new RoundedBoxGeometry(1.05, 0.1, 0.6, 5, 0.1),
 			new MeshStandardMaterial({
 				color: 0x614bdd,
 			})
 		)
 
-		mouthMesh.rotation.x = -Math.PI * 0.1
-		mouthMesh.position.z = 0.3
-		mouthMesh.position.y = -0.2
+		mouthMesh.rotation.x = -Math.PI * 0.07
+		mouthMesh.position.z = 0.23
+		mouthMesh.position.y = -0.19
 
 		headMesh.add(rightEye, leftEye, mouthMesh)
 
@@ -76,7 +86,7 @@ export default class Snake extends EventDispatcher {
 	}
 
 	init() {
-		this.direction = UP
+		this.direction = RIGHT
 
 		const head = new ListNode(new SnakeNode(this.resolution))
 
@@ -100,25 +110,28 @@ export default class Snake extends EventDispatcher {
 	}
 
 	setDirection(keyCode) {
+		let newDirection
+
 		switch (keyCode) {
 			case 'ArrowUp':
-				this.newDirection = UP
+				newDirection = UP
 				break
 			case 'ArrowDown':
-				this.newDirection = DOWN
+				newDirection = DOWN
 				break
 			case 'ArrowLeft':
-				this.newDirection = LEFT
+				newDirection = LEFT
 				break
 			case 'ArrowRight':
-				this.newDirection = RIGHT
+				newDirection = RIGHT
 				break
+			default:
+				return
 		}
-		if (this.newDirection) {
-			const dot = this.direction.dot(this.newDirection)
-			if (dot !== 0) {
-				this.newDirection = null
-			}
+
+		const dot = this.direction.dot(newDirection)
+		if (dot === 0) {
+			this.newDirection = newDirection
 		}
 	}
 

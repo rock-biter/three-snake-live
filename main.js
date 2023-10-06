@@ -20,7 +20,7 @@ const resolution = new THREE.Vector2(20, 20)
 const scene = new THREE.Scene()
 scene.background = new THREE.Color('#dd9b64')
 
-scene.fog = new THREE.Fog('#dd9b64', 30, 80)
+scene.fog = new THREE.Fog('#dd9b64', 30, 50)
 
 /**
  * Cube
@@ -43,7 +43,11 @@ const sizes = {
  */
 const fov = 60
 const camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1)
-camera.position.set(8 + resolution.x / 2, resolution.x / 2, resolution.y + 6)
+camera.position.set(
+	8 + resolution.x / 2,
+	resolution.x / 2 + 3,
+	resolution.y + 6
+)
 camera.lookAt(new THREE.Vector3(0, 2.5, 0))
 
 /**
@@ -72,10 +76,10 @@ renderer.shadowMap.type = THREE.VSMShadowMap
  */
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
-controls.enableZoom = false
-controls.enablePan = false
-controls.enableRotate = false
-controls.target.set(resolution.x / 2 + 4, 0, resolution.y / 2 + 4)
+// controls.enableZoom = false
+// controls.enablePan = false
+// controls.enableRotate = false
+controls.target.set(resolution.x / 2 + 2, 0, resolution.y / 2 + 4)
 
 /**
  * Three js Clock
@@ -138,11 +142,13 @@ window.addEventListener('keyup', function (e) {
 	console.log(e.code)
 	const keyCode = e.code
 
+	snake.setDirection(keyCode)
+
 	if (keyCode === 'Space') {
 		!isRunning ? startGame() : stopGame()
+	} else if (!isRunning) {
+		startGame()
 	}
-
-	snake.setDirection(keyCode)
 })
 
 let isRunning
@@ -244,15 +250,15 @@ generateEntities()
 const ambLight = new THREE.AmbientLight(0xffffff, 0.6)
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.7)
 
-dirLight.position.set(20, 20, 20)
+dirLight.position.set(20, 20, 18)
 dirLight.target.position.set(resolution.x, 0, resolution.y)
 dirLight.shadow.mapSize.set(1024, 1024)
-dirLight.shadow.radius = 6
+dirLight.shadow.radius = 8
 dirLight.shadow.blurSamples = 20
-dirLight.shadow.camera.top = 30
-dirLight.shadow.camera.bottom = -30
-dirLight.shadow.camera.left = -30
-dirLight.shadow.camera.right = 30
+dirLight.shadow.camera.top = 26
+dirLight.shadow.camera.bottom = -26
+dirLight.shadow.camera.left = -26
+dirLight.shadow.camera.right = 26
 
 dirLight.castShadow = true
 
