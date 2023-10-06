@@ -156,7 +156,7 @@ export default class Snake extends EventDispatcher {
 			const candy = currentNode.prev.data.candy
 			if (candy) {
 				currentNode.data.candy = candy
-				currentNode.data.mesh.scale.setScalar(1.1)
+				currentNode.data.mesh.scale.setScalar(1.15)
 				currentNode.prev.data.candy = null
 				currentNode.prev.data.mesh.scale.setScalar(1)
 			}
