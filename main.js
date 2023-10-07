@@ -467,11 +467,13 @@ const btnPlay = document.getElementById('btn-play')
 
 gsap.fromTo(
 	btnPlay,
-	{ autoAlpha: 0, scale: 0 },
+	{ autoAlpha: 0, scale: 0, yPercent: -50, xPercent: -50 },
 	{
 		duration: 0.8,
 		autoAlpha: 1,
 		scale: 1,
+		yPercent: -50,
+		xPercent: -50,
 		delay: 0.3,
 		ease: `elastic.out(1.2, 0.7)`,
 	}
