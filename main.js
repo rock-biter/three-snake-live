@@ -104,9 +104,9 @@ renderer.shadowMap.type = THREE.VSMShadowMap
  */
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
-// controls.enableZoom = false
-// controls.enablePan = false
-// controls.enableRotate = false
+controls.enableZoom = false
+controls.enablePan = false
+controls.enableRotate = false
 controls.target.set(resolution.x / 2 - 2, 0, resolution.y / 2 + 2)
 
 /**
