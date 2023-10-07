@@ -115,15 +115,19 @@ export default class Snake extends EventDispatcher {
 
 		switch (keyCode) {
 			case 'ArrowUp':
+			case 'KeyW':
 				newDirection = UP
 				break
 			case 'ArrowDown':
+			case 'KeyS':
 				newDirection = DOWN
 				break
 			case 'ArrowLeft':
+			case 'KeyA':
 				newDirection = LEFT
 				break
 			case 'ArrowRight':
+			case 'KeyD':
 				newDirection = RIGHT
 				break
 			default:

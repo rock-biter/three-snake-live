@@ -237,7 +237,7 @@ function startGame() {
 	if (!isRunning) {
 		isRunning = setInterval(() => {
 			snake.update()
-		}, 250)
+		}, 240)
 	}
 }
 
