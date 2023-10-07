@@ -6,7 +6,7 @@ import {
 } from 'three'
 import Entity from './Entity'
 
-const GEOMETRY = new IcosahedronGeometry(0.3, 1)
+const GEOMETRY = new IcosahedronGeometry(0.3)
 GEOMETRY.rotateX(Math.random() * Math.PI * 2)
 GEOMETRY.scale(1, 6, 1)
 const MATERIAL = new MeshStandardMaterial({
