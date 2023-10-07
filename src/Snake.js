@@ -106,6 +106,7 @@ export default class Snake extends EventDispatcher {
 			this.indexes.push(this.end.data.getIndexByCoord())
 		}
 
+		head.data.in()
 		this.scene.add(head.data.mesh)
 	}
 
@@ -241,6 +242,7 @@ export default class Snake extends EventDispatcher {
 		}
 
 		this.body.addNode(node)
+		node.data.in()
 		this.scene.add(node.data.mesh)
 	}
 }
