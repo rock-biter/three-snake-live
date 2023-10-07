@@ -8,5 +8,93 @@
 	</head>
 	<body>
 		<script type="module" src="/main.js"></script>
+		<audio
+			style="opacity: 0"
+			id="audio"
+			class="fixed top-0 left-0 z-50"
+			controls
+			loop="true"
+			src="/snake-3d-short-audio.mp3"
+		>
+			<!-- <a href="/media/cc0-audio/t-rex-roar.mp3"> Download audio </a> -->
+		</audio>
+		<button
+			style="opacity: 0"
+			id="btn-play"
+			class="fixed w-max drop-shadow-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/2"
+		>
+			<img
+				class="h-[3rem] lg:h-[6rem]"
+				src="/btn-play-bg.png"
+				alt=""
+				height="20"
+			/>
+			<span class="absolute" style="opacity: 0">play</span>
+		</button>
+
+		<ul
+			style="opacity: 0"
+			class="fixed w-full px-4 top-bar flex flex-wrap justify-center gap-1 items-center top-4 left-1/2 -translate-x-1/2"
+		>
+			<li class="top-bar__item relative">
+				<img src="/profile.svg" alt="" />
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="https://www.youtube.com/@gianlucalomarco"
+					><img src="/you-tube.svg" alt=""
+				/></a>
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="https://github.com/rock-biter"
+					><img src="/git-hub.svg" alt=""
+				/></a>
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="https://www.linkedin.com/in/gianluca-lomarco-2a496b5b/"
+					><img src="/linked-in.svg" alt=""
+				/></a>
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="https://twitter.com/__rockbiter"
+					><img src="/x-twitter.svg" alt=""
+				/></a>
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="https://medium.com/@gianluca.lomarco"
+					><img src="/medium.svg" alt=""
+				/></a>
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="https://www.instagram.com/gianlucalomarco/"
+					><img src="/instagram.svg" alt=""
+				/></a>
+			</li>
+			<li class="top-bar__item">
+				<a
+					class="block hover:translate-y-2 duration-300 transition-all"
+					target="_blank"
+					href="mailto:info@gianlucalomarco.it"
+					><img src="/mail.svg" alt=""
+				/></a>
+			</li>
+		</ul>
 	</body>
 </html>

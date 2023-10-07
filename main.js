@@ -461,3 +461,80 @@ rockData.forEach(([position, { x, y, z, w }]) => {
 	clone.rotation.y = w
 	scene.add(clone)
 })
+
+const audio = document.getElementById('audio')
+const btnPlay = document.getElementById('btn-play')
+
+gsap.fromTo(
+	btnPlay,
+	{ autoAlpha: 0, scale: 0 },
+	{
+		duration: 0.8,
+		autoAlpha: 1,
+		scale: 1,
+		delay: 0.3,
+		ease: `elastic.out(1.2, 0.7)`,
+	}
+)
+
+btnPlay.addEventListener('click', function () {
+	audio.play()
+
+	gsap.to(this, {
+		duration: 1,
+		scale: 0,
+		ease: `elastic.in(1.2, 0.7)`,
+		onComplete: () => {
+			this.style.visibility = 'hidden'
+		},
+	})
+})
+
+const topBar = document.querySelector('.top-bar')
+const topBarItems = document.querySelectorAll('.top-bar__item')
+
+gsap.set(topBarItems, { y: -200, autoAlpha: 0 })
+
+gsap.to(topBar, {
+	opacity: 1,
+	delay: 0.3,
+	onComplete: () => {
+		gsap.to(topBarItems, {
+			duration: 1,
+			y: 0,
+			autoAlpha: 1,
+			ease: `elastic.out(1.2, 0.9)`,
+			stagger: {
+				amount: 0.3,
+			},
+		})
+	},
+})
+
+const manager = new THREE.LoadingManager()
+const textureLoader = new THREE.TextureLoader(manager)
+
+const wasd = textureLoader.load('/wasd.png')
+const arrows = textureLoader.load('/arrows.png')
+
+const wasdGeometry = new THREE.PlaneGeometry(3.5, 2)
+wasdGeometry.rotateX(-Math.PI * 0.5)
+
+const planeWasd = new THREE.Mesh(
+	wasdGeometry,
+	new THREE.MeshStandardMaterial({ transparent: true, map: wasd })
+)
+
+const planeArrows = new THREE.Mesh(
+	wasdGeometry,
+	new THREE.MeshStandardMaterial({ transparent: true, map: arrows })
+)
+
+planeArrows.position.set(8.7, 0, 21)
+planeWasd.position.set(13, 0, 21)
+
+scene.add(planeArrows, planeWasd)
+
+manager.onLoad = () => {
+	console.log('texture caricate')
+}
