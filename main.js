@@ -26,7 +26,7 @@ loader.load(fontSrc, function (loadedFont) {
 /**
  * Debug
  */
-let gui = new dat.GUI()
+let gui //= new dat.GUI()
 
 const palettes = {
 	green: {
