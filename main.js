@@ -360,19 +360,74 @@ function printScore() {
 // 	// console.log(isRunning)
 // })
 
-// keyboard
-window.addEventListener('keyup', function (e) {
-	// console.log(e.code)
-	const keyCode = e.code
+const mobileArrows = document.getElementById('mobile-arrows')
 
-	snake.setDirection(keyCode)
+function registerEventListener() {
+	if (isMobile) {
+		//mobile
+		const prevTouch = new THREE.Vector2()
+		let middle = 1.55
+		let scale = 1
 
-	if (keyCode === 'Space') {
-		!isRunning ? startGame() : stopGame()
-	} else if (!isRunning) {
-		startGame()
+		window.addEventListener('touchstart', (event) => {
+			const touch = event.targetTouches[0]
+
+			middle = THREE.MathUtils.clamp(middle, 1.45, 1.65)
+
+			// console.log(event)
+			let x, y
+			x = (2 * touch.clientX) / window.innerWidth - 1
+			y = (2 * touch.clientY) / window.innerHeight - middle
+
+			// if (Math.abs(x) < 0.15 && Math.abs(y) < 0.15) {
+			// 	return
+			// }
+
+			if (!isRunning) {
+				startGame()
+			}
+
+			// console.log('click', x, y)
+
+			if (x * scale > y) {
+				if (x * scale < -y) {
+					snake.setDirection('ArrowUp')
+					scale = 3
+				} else {
+					snake.setDirection('ArrowRight')
+					middle += y
+					scale = 0.33
+				}
+			} else {
+				if (-x * scale > y) {
+					snake.setDirection('ArrowLeft')
+					middle += y
+					scale = 0.33
+				} else {
+					snake.setDirection('ArrowDown')
+					scale = 3
+				}
+			}
+
+			prevTouch.x = x
+			prevTouch.y = y
+		})
+	} else {
+		// keyboard
+		window.addEventListener('keyup', function (e) {
+			// console.log(e.code)
+			const keyCode = e.code
+
+			snake.setDirection(keyCode)
+
+			if (keyCode === 'Space') {
+				!isRunning ? startGame() : stopGame()
+			} else if (!isRunning) {
+				startGame()
+			}
+		})
 	}
-})
+}
 
 let isRunning
 
@@ -611,6 +666,8 @@ btnPlay.addEventListener('click', function () {
 			y: 0,
 			z: resolution.y / 2 - 0.5,
 		})
+
+		// gsap.to(mobileArrows, { autoAlpha: 0.3, duration: 1, delay: 0.5 })
 	}
 	gsap.to(scene.fog, { duration: 2, near: isMobile ? 30 : 20, far: 55 })
 
@@ -622,6 +679,8 @@ btnPlay.addEventListener('click', function () {
 			this.style.visibility = 'hidden'
 		},
 	})
+
+	registerEventListener()
 })
 
 const userVolume = localStorage.getItem('volume')
