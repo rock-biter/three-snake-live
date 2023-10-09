@@ -26,7 +26,129 @@ loader.load(fontSrc, function (loadedFont) {
 /**
  * Debug
  */
-// const gui = new dat.GUI()
+let gui // = new dat.GUI()
+
+const palettes = {
+	green: {
+		groundColor: 0x56f854,
+		fogColor: 0x39c09f,
+		rockColor: 0xebebeb, //0x7a95ff,
+		treeColor: 0x639541, //0x1d5846,
+		candyColor: 0x1d5846, //0x614bdd,
+		snakeColor: 0x1d5846, //0xff470a,
+		mouthColor: 0x39c09f,
+	},
+	orange: {
+		groundColor: 0xd68a4c,
+		fogColor: 0xff7438,
+		rockColor: 0xacacac,
+		treeColor: 0xa2d109,
+		candyColor: 0x614bdd,
+		snakeColor: 0xff470a,
+		mouthColor: 0x614bdd,
+	},
+	lilac: {
+		groundColor: 0xd199ff,
+		fogColor: 0x39c09f,
+		rockColor: 0xebebeb,
+		treeColor: 0x53d0c1,
+		candyColor: 0x9900ff,
+		snakeColor: 0xff2ed2,
+		mouthColor: 0x614bdd,
+	},
+}
+
+let paletteName = localStorage.getItem('paletteName') || 'green'
+let selectedPalette = palettes[paletteName]
+
+const params = {
+	...selectedPalette,
+}
+
+function applyPalette(paletteName) {
+	const palette = palettes[paletteName]
+	localStorage.setItem('paletteName', paletteName)
+
+	selectedPalette = palette
+
+	if (!palette) return
+
+	const {
+		groundColor,
+		fogColor,
+		rockColor,
+		treeColor,
+		candyColor,
+		snakeColor,
+		mouthColor,
+	} = palette
+
+	planeMaterial.color.set(groundColor)
+	scene.fog.color.set(fogColor)
+	scene.background.set(fogColor)
+
+	entities
+		.find((entity) => entity instanceof Rock)
+		?.mesh.material.color.set(rockColor)
+	entities
+		.find((entity) => entity instanceof Tree)
+		?.mesh.material.color.set(treeColor)
+	candies[0].mesh.material.color.set(candyColor)
+	snake.body.head.data.mesh.material.color.set(snakeColor)
+
+	snake.body.head.data.mesh.material.color.set(snakeColor)
+	snake.mouthColor = mouthColor
+	snake.mouth.material.color.set(mouthColor)
+
+	btnPlayImg.src = `/btn-play-bg-${paletteName}.png`
+}
+
+if (gui) {
+	gui
+		.addColor(params, 'groundColor')
+		.name('Ground color')
+		.onChange((val) => planeMaterial.color.set(val))
+
+	gui
+		.addColor(params, 'fogColor')
+		.name('Fog color')
+		.onChange((val) => {
+			scene.fog.color.set(val)
+			scene.background.color.set(val)
+		})
+
+	gui
+		.addColor(params, 'rockColor')
+		.name('Rock color')
+		.onChange((val) => {
+			entities
+				.find((entity) => entity instanceof Rock)
+				?.mesh.material.color.set(val)
+		})
+
+	gui
+		.addColor(params, 'treeColor')
+		.name('Tree color')
+		.onChange((val) => {
+			entities
+				.find((entity) => entity instanceof Tree)
+				?.mesh.material.color.set(val)
+		})
+
+	gui
+		.addColor(params, 'candyColor')
+		.name('Candy color')
+		.onChange((val) => {
+			candies[0].mesh.material.color.set(val)
+		})
+
+	gui
+		.addColor(params, 'snakeColor')
+		.name('Snake color')
+		.onChange((val) => {
+			snake.body.head.data.mesh.material.color.set(val)
+		})
+}
 
 let score = 0
 
@@ -44,9 +166,9 @@ gridHelper.material.opacity = 0.3
  * Scene
  */
 const scene = new THREE.Scene()
-scene.background = new THREE.Color('#d68a4c')
+scene.background = new THREE.Color(params.fogColor)
 
-scene.fog = new THREE.Fog('#d68a4c', 25, 50)
+scene.fog = new THREE.Fog(params.fogColor, 25, 50)
 
 scene.add(gridHelper)
 
@@ -71,11 +193,17 @@ const sizes = {
  */
 const fov = 60
 const camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1)
-camera.position.set(
+const finalPosition = new THREE.Vector3(
 	-8 + resolution.x / 2,
 	resolution.x / 2 + 4,
 	resolution.y + 6
 )
+const initialPosition = new THREE.Vector3(
+	resolution.x / 2 + 5,
+	4,
+	resolution.y / 2 + 4
+)
+camera.position.copy(initialPosition)
 // camera.lookAt(new THREE.Vector3(0, 2.5, 0))
 
 /**
@@ -123,7 +251,9 @@ const planeGeometry = new THREE.PlaneGeometry(
 	resolution.y * 50
 )
 planeGeometry.rotateX(-Math.PI * 0.5)
-const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xff7438 })
+const planeMaterial = new THREE.MeshStandardMaterial({
+	color: params.groundColor,
+})
 const plane = new THREE.Mesh(planeGeometry, planeMaterial)
 plane.position.x = resolution.x / 2 - 0.5
 plane.position.z = resolution.y / 2 - 0.5
@@ -133,7 +263,12 @@ scene.add(plane)
 plane.receiveShadow = true
 
 // create snake
-const snake = new Snake({ scene, resolution })
+const snake = new Snake({
+	scene,
+	resolution,
+	color: selectedPalette.snakeColor,
+	mouthColor: selectedPalette.mouthColor,
+})
 // console.log(snake)
 
 snake.addEventListener('updated', function () {
@@ -193,10 +328,7 @@ function printScore() {
 
 	geometry.center()
 
-	const mesh = new THREE.Mesh(
-		geometry,
-		snake.body.head.data.mesh.material.clone()
-	)
+	const mesh = new THREE.Mesh(geometry, snake.body.head.data.mesh.material)
 
 	mesh.position.x = resolution.x / 2 - 0.5
 	mesh.position.z = -4
@@ -234,7 +366,7 @@ window.addEventListener('keyup', function (e) {
 let isRunning
 
 function startGame() {
-	if (!isRunning) {
+	if (!snake.isMoving) {
 		isRunning = setInterval(() => {
 			snake.update()
 		}, 240)
@@ -246,6 +378,7 @@ function startGame() {
 function stopGame() {
 	clearInterval(isRunning)
 	isRunning = null
+	// this.snake.stop()
 }
 
 function resetGame() {
@@ -272,7 +405,7 @@ const candies = []
 const entities = []
 
 function addCandy() {
-	const candy = new Candy(resolution)
+	const candy = new Candy(resolution, selectedPalette.candyColor)
 
 	let index = getFreeIndex()
 
@@ -307,7 +440,9 @@ function getFreeIndex() {
 
 function addEntity() {
 	const entity =
-		Math.random() > 0.5 ? new Rock(resolution) : new Tree(resolution)
+		Math.random() > 0.5
+			? new Rock(resolution, selectedPalette.rockColor)
+			: new Tree(resolution, selectedPalette.treeColor)
 
 	let index = getFreeIndex()
 
@@ -360,43 +495,6 @@ generateEntities()
 scene.add(...lights)
 
 // snake.addTailNode()
-
-/**
- * frame loop
- */
-function tic() {
-	/**
-	 * tempo trascorso dal frame precedente
-	 */
-	// const deltaTime = clock.getDelta()
-	/**
-	 * tempo totale trascorso dall'inizio
-	 */
-	// const time = clock.getElapsedTime()
-
-	controls.update()
-
-	renderer.render(scene, camera)
-
-	requestAnimationFrame(tic)
-}
-
-requestAnimationFrame(tic)
-
-window.addEventListener('resize', handleResize)
-
-function handleResize() {
-	sizes.width = window.innerWidth
-	sizes.height = window.innerHeight
-
-	camera.aspect = sizes.width / sizes.height
-	camera.updateProjectionMatrix()
-
-	renderer.setSize(sizes.width, sizes.height)
-
-	const pixelRatio = Math.min(window.devicePixelRatio, 2)
-	renderer.setPixelRatio(pixelRatio)
-}
 
 // add entities out of the grid
 const treeData = [
@@ -463,7 +561,9 @@ rockData.forEach(([position, { x, y, z, w }]) => {
 })
 
 const audio = document.getElementById('audio')
+const btnVolume = document.getElementById('btn-volume')
 const btnPlay = document.getElementById('btn-play')
+const btnPlayImg = document.getElementById('btn-play-img')
 
 gsap.fromTo(
 	btnPlay,
@@ -482,6 +582,8 @@ gsap.fromTo(
 btnPlay.addEventListener('click', function () {
 	audio.play()
 
+	gsap.to(camera.position, { ...finalPosition, duration: 2 })
+
 	gsap.to(this, {
 		duration: 1,
 		scale: 0,
@@ -491,6 +593,38 @@ btnPlay.addEventListener('click', function () {
 		},
 	})
 })
+
+const userVolume = localStorage.getItem('volume')
+console.log('user volume', userVolume)
+if (userVolume === 'off') {
+	muteVolume()
+}
+
+const initialVolume = audio.volume
+
+btnVolume.addEventListener('click', function () {
+	if (audio.volume === 0) {
+		unmuteVolume()
+	} else {
+		muteVolume()
+	}
+})
+
+function muteVolume() {
+	localStorage.setItem('volume', 'off')
+	gsap.to(audio, { volume: 0, duration: 1 })
+	btnVolume.classList.remove('after:hidden')
+	btnVolume.querySelector(':first-child').classList.remove('animate-ping')
+	btnVolume.classList.add('after:block')
+}
+
+function unmuteVolume() {
+	localStorage.setItem('volume', 'on')
+	btnVolume.classList.add('after:hidden')
+	btnVolume.querySelector(':first-child').classList.add('animate-ping')
+	btnVolume.classList.remove('after:block')
+	gsap.to(audio, { volume: initialVolume, duration: 1 })
+}
 
 const topBar = document.querySelector('.top-bar')
 const topBarItems = document.querySelectorAll('.top-bar__item')
@@ -513,6 +647,30 @@ gsap.to(topBar, {
 	},
 })
 
+const paletteSelectors = document.querySelectorAll('[data-color]')
+gsap.to(topBar, {
+	opacity: 1,
+	delay: 0.5,
+	onComplete: () => {
+		gsap.to(paletteSelectors, {
+			duration: 1,
+			x: 0,
+			autoAlpha: 1,
+			ease: `elastic.out(1.2, 0.9)`,
+			stagger: {
+				amount: 0.2,
+			},
+		})
+	},
+})
+
+paletteSelectors.forEach((selector) =>
+	selector.addEventListener('click', function () {
+		const paletteName = this.dataset.color
+		applyPalette(paletteName)
+	})
+)
+
 const manager = new THREE.LoadingManager()
 const textureLoader = new THREE.TextureLoader(manager)
 
@@ -524,12 +682,16 @@ wasdGeometry.rotateX(-Math.PI * 0.5)
 
 const planeWasd = new THREE.Mesh(
 	wasdGeometry,
-	new THREE.MeshStandardMaterial({ transparent: true, map: wasd })
+	new THREE.MeshStandardMaterial({ transparent: true, map: wasd, opacity: 0.5 })
 )
 
 const planeArrows = new THREE.Mesh(
 	wasdGeometry,
-	new THREE.MeshStandardMaterial({ transparent: true, map: arrows })
+	new THREE.MeshStandardMaterial({
+		transparent: true,
+		map: arrows,
+		opacity: 0.5,
+	})
 )
 
 planeArrows.position.set(8.7, 0, 21)
@@ -539,4 +701,43 @@ scene.add(planeArrows, planeWasd)
 
 manager.onLoad = () => {
 	console.log('texture caricate')
+}
+
+applyPalette(paletteName)
+
+/**
+ * frame loop
+ */
+function tic() {
+	/**
+	 * tempo trascorso dal frame precedente
+	 */
+	// const deltaTime = clock.getDelta()
+	/**
+	 * tempo totale trascorso dall'inizio
+	 */
+	// const time = clock.getElapsedTime()
+
+	controls.update()
+
+	renderer.render(scene, camera)
+
+	requestAnimationFrame(tic)
+}
+
+requestAnimationFrame(tic)
+
+window.addEventListener('resize', handleResize)
+
+function handleResize() {
+	sizes.width = window.innerWidth
+	sizes.height = window.innerHeight
+
+	camera.aspect = sizes.width / sizes.height
+	camera.updateProjectionMatrix()
+
+	renderer.setSize(sizes.width, sizes.height)
+
+	const pixelRatio = Math.min(window.devicePixelRatio, 2)
+	renderer.setPixelRatio(pixelRatio)
 }

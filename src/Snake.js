@@ -25,13 +25,19 @@ const RIGHT = new Vector3(1, 0, 0)
 export default class Snake extends EventDispatcher {
 	direction = RIGHT
 	indexes = []
+	speedInterval = 240
 
-	constructor({ scene, resolution = new Vector2(10, 10) }) {
+	constructor({ scene, resolution = new Vector2(10, 10), color, mouthColor }) {
 		// creare la testa
 		super()
 
 		this.scene = scene
 		this.resolution = resolution
+		this.mouthColor = mouthColor
+
+		if (color) {
+			NODE_MATERIAL.color.set(color)
+		}
 
 		this.init()
 	}
@@ -72,7 +78,7 @@ export default class Snake extends EventDispatcher {
 		const mouthMesh = new Mesh(
 			new RoundedBoxGeometry(1.05, 0.1, 0.6, 5, 0.1),
 			new MeshStandardMaterial({
-				color: 0x614bdd,
+				color: this.mouthColor, //0x614bdd,
 			})
 		)
 
@@ -80,13 +86,16 @@ export default class Snake extends EventDispatcher {
 		mouthMesh.position.z = 0.23
 		mouthMesh.position.y = -0.19
 
+		this.mouth = mouthMesh
+
 		headMesh.add(rightEye, leftEye, mouthMesh)
 
 		headMesh.lookAt(headMesh.position.clone().add(this.direction))
 	}
 
 	init() {
-		this.direction = RIGHT
+		this.directions = [RIGHT]
+		this.iMoving = null
 
 		const head = new ListNode(new SnakeNode(this.resolution))
 
@@ -109,6 +118,19 @@ export default class Snake extends EventDispatcher {
 		head.data.in()
 		this.scene.add(head.data.mesh)
 	}
+
+	// move() {
+	// 	this.update()
+
+	// 	this.isMoving = setTimeout(() => {
+	// 		this.move()
+	// 	}, this.speedInterval)
+	// }
+
+	// stop() {
+	// 	clearTimeout(this.isMoving)
+	// 	this.isMoving = null
+	// }
 
 	setDirection(keyCode) {
 		let newDirection
@@ -136,7 +158,10 @@ export default class Snake extends EventDispatcher {
 
 		const dot = this.direction.dot(newDirection)
 		if (dot === 0) {
+			// this.directions.push()
 			this.newDirection = newDirection
+			// this.stop()
+			// this.move()
 		}
 	}
 
@@ -147,6 +172,8 @@ export default class Snake extends EventDispatcher {
 			this.direction = this.newDirection
 			this.newDirection = null
 		}
+		// const direction =
+		// 	this.directions.length > 1 ? this.directions.shift() : this.directions[0]
 
 		let currentNode = this.end
 
