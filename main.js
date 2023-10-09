@@ -26,7 +26,7 @@ loader.load(fontSrc, function (loadedFont) {
 /**
  * Debug
  */
-let gui // = new dat.GUI()
+let gui = new dat.GUI()
 
 const palettes = {
 	green: {
@@ -40,7 +40,7 @@ const palettes = {
 	},
 	orange: {
 		groundColor: 0xd68a4c,
-		fogColor: 0xff7438,
+		fogColor: 0xffac38,
 		rockColor: 0xacacac,
 		treeColor: 0xa2d109,
 		candyColor: 0x614bdd,
@@ -49,7 +49,7 @@ const palettes = {
 	},
 	lilac: {
 		groundColor: 0xd199ff,
-		fogColor: 0x39c09f,
+		fogColor: 0xb04ce6,
 		rockColor: 0xebebeb,
 		treeColor: 0x53d0c1,
 		candyColor: 0x9900ff,
@@ -168,7 +168,7 @@ gridHelper.material.opacity = 0.3
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(params.fogColor)
 
-scene.fog = new THREE.Fog(params.fogColor, 25, 50)
+scene.fog = new THREE.Fog(params.fogColor, 5, 40)
 
 scene.add(gridHelper)
 
@@ -583,6 +583,7 @@ btnPlay.addEventListener('click', function () {
 	audio.play()
 
 	gsap.to(camera.position, { ...finalPosition, duration: 2 })
+	gsap.to(scene.fog, { duration: 2, near: 20, far: 55 })
 
 	gsap.to(this, {
 		duration: 1,
