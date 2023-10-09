@@ -94,7 +94,7 @@ export default class Snake extends EventDispatcher {
 	}
 
 	init() {
-		this.directions = [RIGHT]
+		this.direction = RIGHT
 		this.iMoving = null
 
 		const head = new ListNode(new SnakeNode(this.resolution))

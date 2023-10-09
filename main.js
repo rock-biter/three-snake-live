@@ -14,6 +14,7 @@ import fontSrc from 'three/examples/fonts/helvetiker_bold.typeface.json?url'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import Entity from './src/Entity'
 
+const isMobile = window.innerWidth <= 768
 const loader = new FontLoader()
 let font
 
@@ -161,7 +162,7 @@ const gridHelper = new THREE.GridHelper(
 )
 gridHelper.position.set(resolution.x / 2 - 0.5, -0.49, resolution.y / 2 - 0.5)
 gridHelper.material.transparent = true
-gridHelper.material.opacity = 0.3
+gridHelper.material.opacity = isMobile ? 0.75 : 0.3
 /**
  * Scene
  */
@@ -193,11 +194,14 @@ const sizes = {
  */
 const fov = 60
 const camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1)
-const finalPosition = new THREE.Vector3(
-	-8 + resolution.x / 2,
-	resolution.x / 2 + 4,
-	resolution.y + 6
-)
+
+const finalPosition = isMobile
+	? new THREE.Vector3(resolution.x / 2 - 0.5, resolution.x + 15, resolution.y)
+	: new THREE.Vector3(
+			-8 + resolution.x / 2,
+			resolution.x / 2 + 4,
+			resolution.y + 6
+	  )
 const initialPosition = new THREE.Vector3(
 	resolution.x / 2 + 5,
 	4,
@@ -235,7 +239,11 @@ controls.enableDamping = true
 controls.enableZoom = false
 controls.enablePan = false
 controls.enableRotate = false
-controls.target.set(resolution.x / 2 - 2, 0, resolution.y / 2 + 2)
+controls.target.set(
+	resolution.x / 2 - 2,
+	0,
+	resolution.y / 2 + (isMobile ? 0 : 2)
+)
 
 /**
  * Three js Clock
@@ -327,6 +335,9 @@ function printScore() {
 	})
 
 	geometry.center()
+	if (isMobile) {
+		geometry.rotateX(-Math.PI * 0.5)
+	}
 
 	const mesh = new THREE.Mesh(geometry, snake.body.head.data.mesh.material)
 
@@ -533,22 +544,33 @@ treeData.forEach(({ x, y, z, w }) => {
 })
 
 const rock = new Rock(resolution)
+const resX = resolution.x
+const rexY = resolution.y
 
 const rockData = [
 	[new THREE.Vector3(-7, -0.5, 2), new THREE.Vector4(2, 8, 3, 2.8)],
 	[new THREE.Vector3(-3, -0.5, -10), new THREE.Vector4(3, 2, 2.5, 1.5)],
 	[new THREE.Vector3(-5, -0.5, 3), new THREE.Vector4(1, 1.5, 2, 0.8)],
-	[new THREE.Vector3(25, -0.5, 3), new THREE.Vector4(4, 1, 3, 1)],
-	[new THREE.Vector3(24, -0.5, 2), new THREE.Vector4(2, 2, 1, 1)],
-	[new THREE.Vector3(28, -0.5, 16), new THREE.Vector4(6, 2, 4, 4)],
-	[new THREE.Vector3(26, -0.5, 13), new THREE.Vector4(3, 2, 2.5, 3.2)],
-	[new THREE.Vector3(25, -0.5, -8), new THREE.Vector4(1, 1, 1, 0)],
-	[new THREE.Vector3(26, -0.5, -7), new THREE.Vector4(2, 4, 1.5, 0.5)],
+	[new THREE.Vector3(resX + 5, -0.5, 3), new THREE.Vector4(4, 1, 3, 1)],
+	[new THREE.Vector3(resX + 4, -0.5, 2), new THREE.Vector4(2, 2, 1, 1)],
+	[new THREE.Vector3(resX + 8, -0.5, 16), new THREE.Vector4(6, 2, 4, 4)],
+	[new THREE.Vector3(resX + 6, -0.5, 13), new THREE.Vector4(3, 2, 2.5, 3.2)],
+	[new THREE.Vector3(resX + 5, -0.5, -8), new THREE.Vector4(1, 1, 1, 0)],
+	[new THREE.Vector3(resX + 6, -0.5, -7), new THREE.Vector4(2, 4, 1.5, 0.5)],
 	[new THREE.Vector3(-5, -0.5, 14), new THREE.Vector4(1, 3, 2, 0)],
 	[new THREE.Vector3(-4, -0.5, 15), new THREE.Vector4(0.8, 0.6, 0.7, 0)],
-	[new THREE.Vector3(15, -0.5, 25), new THREE.Vector4(2.5, 0.8, 4, 2)],
-	[new THREE.Vector3(19, -0.5, 22), new THREE.Vector4(1.2, 2, 1.2, 1)],
-	[new THREE.Vector3(18, -0.5, 21.5), new THREE.Vector4(0.8, 1, 0.8, 2)],
+	[
+		new THREE.Vector3(resX / 2 + 5, -0.5, 25),
+		new THREE.Vector4(2.5, 0.8, 4, 2),
+	],
+	[
+		new THREE.Vector3(resX / 2 + 9, -0.5, 22),
+		new THREE.Vector4(1.2, 2, 1.2, 1),
+	],
+	[
+		new THREE.Vector3(resX / 2 + 8, -0.5, 21.5),
+		new THREE.Vector4(0.8, 1, 0.8, 2),
+	],
 	// [new THREE.Vector3(0, -0.5, 0), new THREE.Vector4(1, 1, 1, 0)],
 ]
 
@@ -583,7 +605,14 @@ btnPlay.addEventListener('click', function () {
 	audio.play()
 
 	gsap.to(camera.position, { ...finalPosition, duration: 2 })
-	gsap.to(scene.fog, { duration: 2, near: 20, far: 55 })
+	if (isMobile) {
+		gsap.to(controls.target, {
+			x: resolution.x / 2 - 0.5,
+			y: 0,
+			z: resolution.y / 2 - 0.5,
+		})
+	}
+	gsap.to(scene.fog, { duration: 2, near: isMobile ? 30 : 20, far: 55 })
 
 	gsap.to(this, {
 		duration: 1,
@@ -683,7 +712,11 @@ wasdGeometry.rotateX(-Math.PI * 0.5)
 
 const planeWasd = new THREE.Mesh(
 	wasdGeometry,
-	new THREE.MeshStandardMaterial({ transparent: true, map: wasd, opacity: 0.5 })
+	new THREE.MeshStandardMaterial({
+		transparent: true,
+		map: wasd,
+		opacity: isMobile ? 0 : 0.5,
+	})
 )
 
 const planeArrows = new THREE.Mesh(
@@ -691,7 +724,7 @@ const planeArrows = new THREE.Mesh(
 	new THREE.MeshStandardMaterial({
 		transparent: true,
 		map: arrows,
-		opacity: 0.5,
+		opacity: isMobile ? 0 : 0.5,
 	})
 )
 

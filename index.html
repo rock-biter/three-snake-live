@@ -26,11 +26,11 @@
 		<button
 			style="opacity: 0"
 			id="btn-play"
-			class="fixed w-max drop-shadow-xl top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+			class="fixed w-max drop-shadow-xl top-[75%] lg:top-[60%] left-1/2"
 		>
 			<img
 				id="btn-play-img"
-				class="h-[3rem] lg:h-[6rem]"
+				class="h-[4rem] lg:h-[6rem]"
 				src="/btn-play-bg-green.png"
 				alt=""
 				height="20"
@@ -53,14 +53,16 @@
 			<span class="absolute" style="opacity: 0">mute</span>
 		</button>
 
-		<ul class="fixed left-4 flex flex-col gap-4 top-1/2 -translate-y-1/2 z-50">
+		<ul
+			class="fixed left-4 flex lg:flex-col gap-3 lg:gap-4 bottom-4 lg:top-1/2 lg:-translate-y-1/2 z-50"
+		>
 			<li
 				style="transform: translateX(-200px)"
 				data-color="green"
 				class="cursor-pointer"
 			>
 				<img
-					class="aspect-square hover:scale-110 transition-transform duration-150 ease-in-out rounded-full border-4 border-white w-11"
+					class="aspect-square hover:scale-110 transition-transform duration-150 ease-in-out rounded-full border-2 lg:border-4 border-white w-9 lg:w-11"
 					src="/palette-green.png"
 					height="44"
 					alt=""
@@ -72,7 +74,7 @@
 				class="cursor-pointer"
 			>
 				<img
-					class="aspect-square hover:scale-110 transition-transform duration-150 ease-in-out rounded-full border-4 border-white w-11"
+					class="aspect-square hover:scale-110 transition-transform duration-150 ease-in-out rounded-full border-2 lg:border-4 border-white w-9 lg:w-11"
 					src="/palette-orange.png"
 					height="44"
 					alt=""
@@ -84,7 +86,7 @@
 				class="cursor-pointer"
 			>
 				<img
-					class="aspect-square hover:scale-110 transition-transform duration-150 ease-in-out rounded-full border-4 border-white w-11"
+					class="aspect-square hover:scale-110 transition-transform duration-150 ease-in-out rounded-full border-2 lg:border-4 border-white w-9 lg:w-11"
 					src="/palette-lilac.png"
 					height="44"
 					alt=""
