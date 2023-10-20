@@ -1,6 +1,6 @@
 # SNake 3D
 
-This repo is a a snake 3D game. 
+This repo is a a snake 3D game, winner of a Honorable Mention on awwwards at October 13, 2023.
 
 [Play the game](https://snake-3d.dev/)
 
