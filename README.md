@@ -2,7 +2,6 @@
 
 This repo is a a snake 3D game. 
 
-It include a basic scene with a cube, perspective camera, orbit controls and GUI.
 [Play the game](https://snake-3d.dev/)
 
 [Learn three.js on my You Tube channel](https://www.youtube.com/@gianlucalomarco)
