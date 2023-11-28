@@ -349,7 +349,7 @@ function printScore() {
 
 	scoreEntity = new Entity(mesh, resolution, { size: 0.8, number: 0.3 })
 
-	console.log('font mesh:', mesh)
+	// console.log('font mesh:', mesh)
 
 	scoreEntity.in()
 	scene.add(scoreEntity.mesh)
@@ -684,7 +684,7 @@ btnPlay.addEventListener('click', function () {
 })
 
 const userVolume = localStorage.getItem('volume')
-console.log('user volume', userVolume)
+// console.log('user volume', userVolume)
 if (userVolume === 'off') {
 	muteVolume()
 }
@@ -793,7 +793,7 @@ planeWasd.position.set(13, 0, 21)
 scene.add(planeArrows, planeWasd)
 
 manager.onLoad = () => {
-	console.log('texture caricate')
+	// console.log('texture caricate')
 }
 
 applyPalette(paletteName)
