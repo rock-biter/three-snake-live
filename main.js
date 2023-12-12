@@ -414,7 +414,7 @@ function registerEventListener() {
 		})
 	} else {
 		// keyboard
-		window.addEventListener('keyup', function (e) {
+		window.addEventListener('keydown', function (e) {
 			// console.log(e.code)
 			const keyCode = e.code
 
